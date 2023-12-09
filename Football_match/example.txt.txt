@@ -1,7 +1,0 @@
-Match	12	12	Moscow	2	1	5	
-Team	3	Ahmat
-Team	2	CSK
-Player	1	Lionel Pepsi	3
-Player	2	Cristiano Ronaldo	3
-Player	3	Artym Dzuba	3
-Player	4	Denis Baramia	2

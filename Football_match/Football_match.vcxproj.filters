@@ -1,25 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Parser">
-      <UniqueIdentifier>{1d67bbb7-a824-424e-aeea-c95851d36d39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Id">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="informationStorages">
-      <UniqueIdentifier>{f21aa5c6-0210-4ccc-abaf-4f5628bdb222}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="informationStorages\LinkTable">
-      <UniqueIdentifier>{ff70798a-ee54-4bf4-bfd6-908c90b6726c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="informationStorages\Database">
-      <UniqueIdentifier>{25848dfc-3189-4a22-b424-b02805ad2861}</UniqueIdentifier>
     </Filter>
     <Filter Include="footbalMatchElement">
       <UniqueIdentifier>{5336f49a-eb1f-4625-a47f-a8ce0c6b60dc}</UniqueIdentifier>
@@ -33,22 +17,46 @@
     <Filter Include="footbalMatchElement\Match">
       <UniqueIdentifier>{8077bf4f-6e54-48cf-af3d-b00415bdcb2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="serviceClasses">
+    <Filter Include="error">
+      <UniqueIdentifier>{e1609eea-4ec6-4e0f-9b5c-8a9b183380b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="parser">
+      <UniqueIdentifier>{1d67bbb7-a824-424e-aeea-c95851d36d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="elementCreator">
       <UniqueIdentifier>{ab1e0dfe-40ff-415a-aa81-854db362b05b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{25848dfc-3189-4a22-b424-b02805ad2861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LinkTable">
+      <UniqueIdentifier>{ff70798a-ee54-4bf4-bfd6-908c90b6726c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Football_match.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="parser.cpp">
-      <Filter>Parser</Filter>
+      <Filter>parser</Filter>
     </ClCompile>
-    <ClCompile Include="elementCreator.cpp">
-      <Filter>serviceClasses</Filter>
+    <ClCompile Include="date.cpp">
+      <Filter>footbalMatchElement\Match</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cpp">
+      <Filter>footbalMatchElement\Match</Filter>
+    </ClCompile>
+    <ClCompile Include="dataBase.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="linkTable.cpp">
+      <Filter>LinkTable</Filter>
+    </ClCompile>
+    <ClCompile Include="databaseElementLoader.cpp">
+      <Filter>Database</Filter>
     </ClCompile>
     <ClCompile Include="dataBaseSaver.cpp">
-      <Filter>serviceClasses</Filter>
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="id.cpp">
+      <Filter>Id</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -56,13 +64,13 @@
       <Filter>Id</Filter>
     </ClInclude>
     <ClInclude Include="dataBase.h">
-      <Filter>informationStorages\Database</Filter>
+      <Filter>Database</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>footbalMatchElement\Player</Filter>
     </ClInclude>
     <ClInclude Include="parser.h">
-      <Filter>Parser</Filter>
+      <Filter>parser</Filter>
     </ClInclude>
     <ClInclude Include="team.h">
       <Filter>footbalMatchElement\Team</Filter>
@@ -70,20 +78,32 @@
     <ClInclude Include="match.h">
       <Filter>footbalMatchElement\Match</Filter>
     </ClInclude>
-    <ClInclude Include="linkTableCreator.h">
-      <Filter>informationStorages\LinkTable</Filter>
-    </ClInclude>
     <ClInclude Include="linkTable.h">
-      <Filter>informationStorages\LinkTable</Filter>
+      <Filter>LinkTable</Filter>
     </ClInclude>
     <ClInclude Include="token.h">
-      <Filter>Parser</Filter>
+      <Filter>parser</Filter>
     </ClInclude>
-    <ClInclude Include="elementCreator.h">
-      <Filter>serviceClasses</Filter>
+    <ClInclude Include="result.h">
+      <Filter>footbalMatchElement\Match</Filter>
+    </ClInclude>
+    <ClInclude Include="parserError.h">
+      <Filter>error</Filter>
+    </ClInclude>
+    <ClInclude Include="dataBaseError.h">
+      <Filter>error</Filter>
+    </ClInclude>
+    <ClInclude Include="date.h">
+      <Filter>footbalMatchElement\Match</Filter>
+    </ClInclude>
+    <ClInclude Include="databaseElementLoader.h">
+      <Filter>Database</Filter>
     </ClInclude>
     <ClInclude Include="dataBaseSaver.h">
-      <Filter>serviceClasses</Filter>
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="elementCreator.h">
+      <Filter>elementCreator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

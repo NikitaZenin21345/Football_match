@@ -1,6 +1,5 @@
 #pragma once
 #include <fstream>
-
 #include "dataBase.h"
 #include "linkTable.h"
 

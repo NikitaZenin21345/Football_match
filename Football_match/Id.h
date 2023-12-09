@@ -1,4 +1,8 @@
 #pragma once
+#include <type_traits>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 class ID
 {
@@ -21,3 +25,4 @@ public:
 		return std::hash<size_t>()(id.getId());
 	}
 };
+

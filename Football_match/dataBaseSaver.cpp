@@ -1,4 +1,5 @@
 #include "dataBaseSaver.h"
+#include "match.h"
 
 namespace 
 {
@@ -15,7 +16,8 @@ void dataBaseSaver::saveMatches(std::ofstream& dataFile) const
 	{
 		dataFile << matchName << separator;
 		dataFile << match_->first.getId() << separator << match_->second->getDate() << separator;
-		dataFile << match_->second->getPlace() << separator << match_->second->getResult() << separator;
+		dataFile << match_->second->getPlace() << separator << match_->second->getResult().getFirstScore()<<
+			":" << match_->second->getResult().getSecondtScore() << separator;
 		for (const auto& teamIdInMatch : footballLinkTable.getTeamsInMatch(match_->first))
 		{
 			dataFile << teamIdInMatch.getId() << separator;

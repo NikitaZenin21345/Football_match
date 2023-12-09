@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "parserError.h"
 
 class tokens final
 {
@@ -16,5 +17,5 @@ public:
 		return tokens_.at(index);
 	}
 
-	bool isValid() const noexcept { return valid_; }
+	[[nodiscard]] bool isValid() const noexcept { return valid_; }
 };

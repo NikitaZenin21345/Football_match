@@ -13,12 +13,16 @@ public:
 class player final
 {
 	std::string name;
+	playerId id;
+
 public:
+
 	player() = default;
-	player( std::string& name_): name(std::move(name_)){}
+	player( std::string& name_, const playerId& id_): name(std::move(name_)), id(id_){}
 	[[nodiscard]]const std::string& getName() const noexcept { return name; }
 	bool operator==(const player& other) const
 	{
 		return name == other.name;
 	}
+	[[nodiscard]]const playerId& getId() const { return id; }
 };

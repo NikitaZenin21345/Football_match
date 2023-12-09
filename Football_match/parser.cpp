@@ -22,7 +22,7 @@ static size_t add_token(const std::string& input_str, const size_t start_positio
 	return end;
 }
 
-tokens parse_next_line(std::istream& stream,const std::string& forbidden )
+tokens parseNextLine(std::istream& stream,const std::string& forbidden )
 {
 	size_t index = 0;
 	std::string input_str;

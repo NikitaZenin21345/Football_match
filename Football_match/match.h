@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
+#include <ctime>
 #include "Id.h"
+#include "result.h"
+#include "date.h"
 
 class matchId final : public ID
 {
@@ -15,22 +18,28 @@ public:
 
 class match final
 {
-	using Result = int;
-	using Data = int;
-	Data date{};
-	std::string place{};
-	Result result{};
-	
+	date matchDate;
+	std::string place;
+	result matchResult;
+	matchId id;
 public:
-	match(int date_, std::string& name_, int result_) : date(date_), place(std::move(name_)),  result(result_){}
-	void setDate(const int date_) { date = date_; }
-	void setResult(const int result_) { result = result_; }
+	match(const std::tm& date_, std::string& place_,const result& result_, const matchId& id_) : matchDate(date_),
+		place(std::move(place_)), matchResult(result_), id(id_){}
+	void setDate(const date& date_)
+	{
+		matchDate = date_;
+	}
+	void setResult(const result result_) { matchResult = result_; }
 	void setPlace(const std::string& place_) { place = place_; }
-	[[nodiscard]] Data getDate() const { return date ; }
-	[[nodiscard]] Result getResult() const {return result; }
+	[[nodiscard]] std::string getDate() const
+	{
+		return matchDate.getDataInString();
+	}
+	[[nodiscard]] result getResult() const {return matchResult; }
 	[[nodiscard]] const std::string& getPlace() const {return place; }
 	bool operator==(const match& other) const
 	{
-		return date == other.date && place == other. place && result == other.result;
+		return matchDate == other.matchDate && place == other.place && matchResult == other.matchResult;
 	}
+	[[nodiscard]] const matchId& getId() const { return id; }
 };

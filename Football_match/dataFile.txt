@@ -1,0 +1,10 @@
+Match	12	12	Moscow	1:1	3	4	
+Match	4	1	Argentina	3:1	2	3	
+Match	13	1	Kiev	0:1	3	2	
+Team	3	Ahmat
+Team	2	CSK
+Team	4	PSG
+Player	1	Lionel Pepsi	3
+Player	2	Cristiano Ronaldo	3
+Player	3	Artym Dzuba	3
+Player	4	Diego Maradonna	4

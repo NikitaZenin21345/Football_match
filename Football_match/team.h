@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <unordered_set>
 #include "Id.h"
 
 
@@ -17,13 +16,15 @@ public:
 
 class team final
 {
+	teamId id;
 	std::string name;
 public:
 	team() = default;//delete
-	team( std::string& name_) : name(std::move(name_)) {}
+	team(std::string& name_, const teamId& id_) : id(id_), name(std::move(name_)){}
 	[[nodiscard]] const std::string& getName() const noexcept { return name; }
 	bool operator==(const team& other) const
 	{
 		return name == other.name;
 	}
+	[[nodiscard]] const teamId& getId() const { return id; }
 };
