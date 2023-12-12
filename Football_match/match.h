@@ -9,7 +9,7 @@ class matchId final : public ID
 {
 public:
 	matchId() = default;
-	explicit matchId(const size_t id_) : ID(id_) {}
+	explicit matchId(const boost::uuids::uuid& id_) : ID(id_) {}
 	bool operator==(const matchId& otherId) const
 	{
 		return id == otherId.id;
@@ -18,11 +18,12 @@ public:
 
 class match final
 {
-	date matchDate;
-	std::string place;
-	result matchResult;
-	matchId id;
+	date matchDate{};
+	std::string place{};
+	result matchResult{};
+	matchId id{};
 public:
+	match() = default;
 	match(const std::tm& date_, std::string& place_,const result& result_, const matchId& id_) : matchDate(date_),
 		place(std::move(place_)), matchResult(result_), id(id_){}
 	void setDate(const date& date_)
@@ -42,4 +43,5 @@ public:
 		return matchDate == other.matchDate && place == other.place && matchResult == other.matchResult;
 	}
 	[[nodiscard]] const matchId& getId() const { return id; }
+	void setId(const matchId& newId) noexcept { id = newId; }
 };

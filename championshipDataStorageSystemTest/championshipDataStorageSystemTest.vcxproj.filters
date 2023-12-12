@@ -8,16 +8,16 @@
     <ClCompile Include="elementCreatorTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="playerTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="teamTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
     <ClCompile Include="dataBaseSaverTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="linkTableTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="parserTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="dataBaseTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>

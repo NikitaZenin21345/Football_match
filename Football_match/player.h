@@ -6,7 +6,7 @@ class playerId final: public ID
 {
 public:
 	playerId() = default;
-	explicit playerId(const size_t id_): ID(id_){}
+	explicit playerId(const boost::uuids::uuid& id_): ID(id_){}
 	bool operator==(const playerId& other) const noexcept { return id == other.id; }
 };
 
@@ -25,4 +25,5 @@ public:
 		return name == other.name;
 	}
 	[[nodiscard]]const playerId& getId() const { return id; }
+	void setId(const playerId& newId) noexcept { id = newId; }
 };

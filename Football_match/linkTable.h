@@ -24,19 +24,19 @@ public:
 	void add(const matchId& newMatchId, const teamId& newTeam);
 	
 
-	[[nodiscard]]decltype(auto) getAllPlayersInTeam(const teamId& id) const
+	[[nodiscard]] auto& getAllPlayersInTeam(const teamId& id) const
 	{
 		const auto foundElement = playersInTeam.find(id);
 		return foundElement == playersInTeam.end() ? throw noFoundTableElement("No found team ID") : foundElement->second;
 	}
 
-	[[nodiscard]] decltype(auto) getTeamsInMatch(const matchId& id) const
+	[[nodiscard]] auto& getTeamsInMatch(const matchId& id) const
 	{
 		const auto foundElement = teamsInMatch.find(id);
 		return foundElement == teamsInMatch.end() ? throw noFoundTableElement("No found match ID") : foundElement->second;
 	}
 
-	[[nodiscard]] decltype(auto) getPlayerTeam(const playerId& id) const
+	[[nodiscard]] auto& getPlayerTeam(const playerId& id) const
 	{
 		const auto foundElement = teamsPlayers.find(id);
 		return foundElement == teamsPlayers.end() ? throw noFoundTableElement("No found player ID") : foundElement->second;

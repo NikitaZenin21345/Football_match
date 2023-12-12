@@ -7,7 +7,7 @@ class teamId final : public ID
 {
 public:
 	teamId() = default;
-	explicit teamId(const size_t id_) : ID(id_) {}
+	explicit teamId(const boost::uuids::uuid& id_) : ID(id_) {}
 	bool operator==(const teamId& otherId) const
 	{
 		return id == otherId.id;
@@ -24,7 +24,8 @@ public:
 	[[nodiscard]] const std::string& getName() const noexcept { return name; }
 	bool operator==(const team& other) const
 	{
-		return name == other.name;
+		return (name == other.name);
 	}
 	[[nodiscard]] const teamId& getId() const { return id; }
+	void setId(const teamId& newId) noexcept { id = newId; }
 };

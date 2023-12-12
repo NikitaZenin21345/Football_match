@@ -8,8 +8,6 @@
 #include "parser.h"
 #include "token.h"
 
-
-
 enum class parserStrategy { loadElementInDataBase, addNewElementInDataBase };
 
 class  databaseElementLoader final
@@ -23,65 +21,39 @@ class  databaseElementLoader final
 
 	template<typename Id, typename Element>
 	//req
-	Id insertInDataBase(const Element& element) const
+	Id insertUniqueElementInDataBase(Element& element)
 	{
 		auto elementId = footballMatchDataBase.findId(element);
 		if (elementId == Id{})
 		{
-			elementId = footballMatchDataBase.add(element);
+			elementId = Id(footballMatchDataBase.getNewId());
+			element.setId(elementId);
+			footballMatchDataBase.add(elementId, element);
 		}
 		return elementId;
 	}
 
-	void createTeamAndAddInDataBase(tokens& parameters) const
-	{
-		insertInDataBase<teamId, team>(team(parameters.getTokens(1), teamId(0)));
-	}
+	void createPlayerAndLoadInDataBase(tokens& parameters) ;
 
-	void createPlayerAndLoadInDataBase(tokens& parameters) const;
+	void createPlayerAndAddNewInDataBase(tokens& parameters) ;
 
-	void createPlayerAndAddNewInDataBase(tokens& parameters) const;
+	void addPlayer(tokens& parameters);
 
-	void addPlayer(tokens& parameters) const;
+	void createTeamAndAddInDataBase(tokens& parameters);
 
-	void createTeamAndLoadInDataBase(tokens& parameters) const;
+	void createTeamAndLoadInDataBase(tokens& parameters) ;
 
-	void addTeam(tokens& parameters) const;
+	void addTeam(tokens& parameters);
 
-	void createMatchAndLoadInDataBase(tokens& parameters) const;
+	void createMatchAndLoadInDataBase(tokens& parameters) ;
 
-	void createMatchAndAddInDataBase(tokens& parameters) const;
+	void createMatchAndAddInDataBase(tokens& parameters) ;
 
-	void addMatch(tokens& parameters) const;
-
-	template<typename Id>
-	//requires
-	[[nodiscard]] bool compareElementInLinkTable(const std::unordered_set<Id, idHash<Id>>& allElement) const
-	{
-		auto element = allElement.begin();
-		while (element != allElement.end())
-		{
-			if (footballMatchDataBase.findElement(*element) == nullptr)
-			{
-				return false;
-			}
-			++element;
-		}
-		return true;
-	}
-	[[nodiscard]] bool checkPlayersInTeam() const;
-
-	[[nodiscard]] bool checkTeamInMatch() const;
-
-	[[nodiscard]] bool checkIntegrity() const noexcept
-	{
-		return checkPlayersInTeam() && checkTeamInMatch();
-	}
+	void addMatch(tokens& parameters);
 
 public:
-	void setParserStrategy(const parserStrategy newStrategy)
+	void setParserStrategy(const parserStrategy newStrategy) noexcept
 	{
-		//checkIntegrity();
 		strategy = newStrategy;
 	}
 
@@ -114,7 +86,7 @@ public:
 			}
 			case elementType::INVALID:
 			{
-				throw parserException("No valid element naming");
+				throw parserException("Invalid element naming");
 			}
 			}
 		}

@@ -6,7 +6,7 @@
 #include "Football_match/databaseElementLoader.h"
 
 
-class ElementCreatorTest : public ::testing::Test {
+class DataBaseTest : public ::testing::Test {
 protected:
     virtual void SetUp(void) {
 

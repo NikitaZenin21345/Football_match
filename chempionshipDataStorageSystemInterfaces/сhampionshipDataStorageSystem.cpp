@@ -10,83 +10,167 @@
 
 namespace
 {
-	enum addDataOperation { addData, readData, addFromConsole, addFromFile };
-	enum readDataOperation { getListAllTeamsPlayer, getMatchTeams, getPlayersCommand };
+	enum operations { addData, readData, Invalid };
+	enum addDataOperation {  addFromConsole , addFromFile };
+	enum readDataOperation { getTeamPlayers = 1, getMatchTeams = 2, getPlayerTeam = 3 };
+
+	template< typename Element>
+	void print(const Element& element);
+
+	template<>
+	void print(const match& element)
+	{
+		std::cout << element.getDate() << "\t";
+		std::cout << element.getResult().getFirstScore() << ":" << element.getResult().getSecondScore() << "\t";
+		std::cout << element.getPlace() << std::endl;
+	}
+
+	template<>
+	void print(const player& element)
+	{
+		std::cout << element.getName() << std::endl;
+	}
+
+	template<>
+	void print(const team& element)
+	{
+		std::cout << element.getName() << std::endl;
+	}
+
+	template<typename Id, typename Element>
+	void printElements(const std::unordered_set<Id, idHash<Id>>& elements, const dataBase& footballMatchDataBase)
+	{
+		for (const auto& element : elements)
+		{
+			print<Element>(footballMatchDataBase.findElement(element));
+		}
+	}
 
 	void saveData(std::ifstream& dataFile, const std::string& dataSaveFileName, dataBase& footballMatchDataBase,
 		linkTable& footballMatchLinkTable)
 	{
 		dataFile.close();
 		std::ofstream saveFile(dataSaveFileName);
-		dataBaseSaver saver{ footballMatchDataBase, footballMatchLinkTable };
+		if (!saveFile.is_open()) {
+			std::cout << "Cannot open file" << std::endl;
+			return;
+		}
+		const dataBaseSaver saver{ footballMatchDataBase, footballMatchLinkTable };
 		saver.save(saveFile);
 		saveFile.close();
 	}
 
-	void addElementFromConsole(databaseElementLoader& Creator, std::string& inputLine)
+	void addElementFromString(databaseElementLoader& Creator, std::string& inputLine)
 	{
 		std::getline(std::cin, inputLine);
 		std::istringstream stringStream(inputLine);
-		Creator.addElement(parseNextLine(stringStream));
+		auto parser = textFileParser(stringStream);
+		Creator.addElement(parser.getParsed());
 	}
 
 	void addElementFromFile(databaseElementLoader& Creator, std::string& inputLine)
 	{
 		std::getline(std::cin, inputLine);
-		std::istringstream stringStream(inputLine);
-		std::ifstream sourceFile(parseNextLine(stringStream, "").getTokens(0));
-		if (!sourceFile.is_open()) {
+		std::ifstream sourceFile(inputLine);
+		if (!sourceFile.is_open())
+		{
 			std::cerr << "Cannot open file" << std::endl;
 			return;
 		}
 		Creator.addElement(sourceFile);
 	}
 
-	void readTeamsPlayers(databaseElementLoader& Creator, std::string& inputLine,
+	void readTeamPlayers(std::string& inputLine,
 		const dataBase& footballMatchDataBase, const linkTable& footballMatchLinkTable)
 	{
+		std::cout << "Input team parameters:" << std::endl;
 		std::getline(std::cin, inputLine);
 		std::istringstream stringStream(inputLine);
-		auto token = parseNextLine(stringStream);
-		auto foundTeam = elementCreator::createTeamFromToken(token, 1);
-		auto team = footballMatchDataBase.getTeamsListBeginning();
-		while (team != footballMatchDataBase.getTeamsListEnd())
+		auto parser = textFileParser(stringStream);
+		const auto searchedTeam = elementCreator::createTeamFromToken(parser.getParsed(), 0);
+		const auto searchedTeamId = footballMatchDataBase.findId(searchedTeam);
+		if (searchedTeamId != teamId())
 		{
-			if (*team->second == foundTeam)
-			{
-
-			}
+			printElements<playerId, player>(footballMatchLinkTable.getAllPlayersInTeam(searchedTeamId), footballMatchDataBase);
 		}
-		//footballMatchLinkTable.getAllPlayersInTeam();
 	}
 
-	void readElementSwitch(databaseElementLoader& Creator, int answer, const dataBase& footballMatchDataBase, const linkTable& footballMatchLinkTable)
+	void readMatchTeams(std::string& inputLine,
+		const dataBase& footballMatchDataBase, const linkTable& footballMatchLinkTable)
+	{
+		std::cout << "Input Match parameters:" << std::endl;
+		std::getline(std::cin, inputLine);
+		std::istringstream stringStream(inputLine);
+		auto parser = textFileParser(stringStream);
+		const auto searchedTeam = elementCreator::createMatchFromToken(parser.getParsed(), 0, 1, 2);
+		const auto searchedMatchId = footballMatchDataBase.findId(searchedTeam);
+		if (searchedMatchId != matchId())
+		{
+			printElements<teamId, team>(footballMatchLinkTable.getTeamsInMatch(searchedMatchId), footballMatchDataBase);
+		}
+	}
+
+	void readPlayerTeam(std::string& inputLine,
+		const dataBase& footballMatchDataBase, const linkTable& footballMatchLinkTable)
+	{
+		std::cout << "Input player parameters:" << std::endl;
+		std::getline(std::cin, inputLine);
+		std::istringstream stringStream(inputLine);
+		auto parser = textFileParser(stringStream);
+		const auto searchedPlayer = elementCreator::createPlayerFromToken(parser.getParsed(), 0);
+		const auto searchedPLayerId = footballMatchDataBase.findId(searchedPlayer);
+		if (searchedPLayerId != playerId())
+		{
+			std::cout << footballMatchDataBase.findElement(footballMatchLinkTable.getPlayerTeam(searchedPLayerId)).getName() << std::endl;
+		}
+	}
+
+	void printReadElementSwitchDialogWindow() noexcept
+	{
+		std::cout << "Switch option\n";
+		std::cout << "1.Get a list of all the team's players\n";
+		std::cout << "2.Get a match team's \n";
+		std::cout << "3.Get a team player`s" << std::endl;
+	}
+
+	int inputAnswer() noexcept
+	{
+		int answer = 0;
+		if (!(std::cin >> answer))
+		{
+			std::cout << "Input Error" << std::endl;
+			std::cin.clear();
+			answer = Invalid;
+		}
+		std::cin.ignore();
+		return answer;
+	}
+
+
+	void readElementSwitch(const dataBase& footballMatchDataBase, const linkTable& footballMatchLinkTable)
 	{
 		std::string inputLine;
 		bool dialogWindowLive = true;
 		while (dialogWindowLive)
 		{
-			std::cout << "Switch option\n";
-			std::cout << "1.Get a list of all the team's players\n";
-			std::cout << "2.Get a match team's \n";
-			std::cout << "3.Get a players command\n";
-			std::cin >> answer;
-			std::cin.ignore();
+			printReadElementSwitchDialogWindow();
+			const int answer = inputAnswer();
+			if (answer == -1) { continue; }
 			switch (answer)
 			{
-			case getListAllTeamsPlayer:
+			case getTeamPlayers:
 			{
-				readTeamsPlayers(Creator, inputLine, footballMatchDataBase, footballMatchLinkTable);
+				readTeamPlayers(inputLine, footballMatchDataBase, footballMatchLinkTable);
 				break;
 			}
 			case getMatchTeams:
 			{
-
+				readMatchTeams(inputLine, footballMatchDataBase, footballMatchLinkTable);
 				break;
 			}
-			case getPlayersCommand:
+			case getPlayerTeam:
 			{
-
+				readPlayerTeam(inputLine, footballMatchDataBase, footballMatchLinkTable);
 				break;
 			}
 			default:
@@ -97,21 +181,21 @@ namespace
 			}
 		}
 	}
-	void addDataOperationSwitch(databaseElementLoader& Creator, int answer)
+	void addDataOperationSwitch(databaseElementLoader& Creator)
 	{
 		Creator.setParserStrategy(parserStrategy::addNewElementInDataBase);
 		std::string inputLine;
 		bool dialogWindowLive = true;
 		while (dialogWindowLive)
 		{
-			std::cout << "Do you want to add information from console(2) or from file(3) or exit(any key)?\n";
-			std::cin >> answer;
-			std::cin.ignore();
+			std::cout << "Do you want to add information from console(0) or from file(1) or exit(any key)?\n";
+			const int answer = inputAnswer();
+			if (answer == -1) { continue; }
 			switch (answer)
 			{
 			case addFromConsole:
 			{
-				addElementFromConsole(Creator, inputLine);
+				addElementFromString(Creator, inputLine);
 				break;
 			}
 			case addFromFile:
@@ -128,23 +212,32 @@ namespace
 		}
 	}
 
-	void launchDialogWindow(databaseElementLoader& Creator, dataBase& footballMatchDataBase, linkTable& footballMatchLinkTable)
+	void launchDialogWindow(databaseElementLoader& Creator,const dataBase& footballMatchDataBase,const linkTable& footballMatchLinkTable)
 	{
-		int answer = 0;
-		std::cout << "Do you want to add information(0) or read(1)?" << std::endl;
-		std::cin >> answer;
-		switch (answer)
+		bool dialogWindowLive = true;
+		while (dialogWindowLive)
 		{
-		case addData:
-		{
-			addDataOperationSwitch(Creator, answer);
-			break;
-		}
-		case readData:
-		{
-			readElementSwitch(Creator, answer, footballMatchDataBase, footballMatchLinkTable);
-			break;
-		}
+			std::cout << "Do you want to add information(0) or read(1)?" << std::endl;
+			const int answer = inputAnswer();
+			if (answer == Invalid) { continue;}
+			switch (answer)
+			{
+			case addData:
+			{
+				addDataOperationSwitch(Creator);
+				break;
+			}
+			case readData:
+			{
+				readElementSwitch(footballMatchDataBase, footballMatchLinkTable);
+				break;
+			}
+			default:
+			{
+				dialogWindowLive = false;
+				break;
+			}
+			}
 		}
 	}
 }
@@ -153,7 +246,7 @@ void execute(const std::string& dataFileName, const std::string& dataSaveFileNam
 {
 	std::ifstream dataFile(dataFileName);
 	if (!dataFile.is_open()) {
-		std::cerr << "Cannot open file" << std::endl;
+		std::cout << "Cannot open file" << std::endl;
 		return;
 	}
 	dataBase footballMatchDataBase;

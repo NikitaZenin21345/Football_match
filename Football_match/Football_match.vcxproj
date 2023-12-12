@@ -163,7 +163,7 @@
     <ClCompile Include="dataBase.cpp" />
     <ClCompile Include="dataBaseSaver.cpp" />
     <ClCompile Include="date.cpp" />
-    <ClCompile Include="databaseElementLoader.cpp" />
+    <ClCompile Include="dataBaseElementLoader.cpp" />
     <ClCompile Include="id.cpp" />
     <ClCompile Include="linkTable.cpp" />
     <ClCompile Include="parser.cpp" />
@@ -173,7 +173,7 @@
     <ClInclude Include="dataBaseError.h" />
     <ClInclude Include="dataBaseSaver.h" />
     <ClInclude Include="date.h" />
-    <ClInclude Include="databaseElementLoader.h" />
+    <ClInclude Include="dataBaseElementLoader.h" />
     <ClInclude Include="elementCreator.h" />
     <ClInclude Include="Id.h" />
     <ClInclude Include="linkTable.h" />

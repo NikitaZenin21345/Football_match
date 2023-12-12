@@ -9,45 +9,46 @@ namespace
 	const std::string separator = "\t";
 }
 
-void dataBaseSaver::saveMatches(std::ofstream& dataFile) const
+void dataBaseSaver::saveMatches(std::ostream& dataFile) const
 {
-	auto match_ = footballDataBase.getMatchesListBeginning();
-	while (match_ != footballDataBase.getMatchesListEnd())
+	auto listMatch = footballDataBase.getMatches().cbegin();
+	while (listMatch != footballDataBase.getMatches().cend())
 	{
 		dataFile << matchName << separator;
-		dataFile << match_->first.getId() << separator << match_->second->getDate() << separator;
-		dataFile << match_->second->getPlace() << separator << match_->second->getResult().getFirstScore()<<
-			":" << match_->second->getResult().getSecondtScore() << separator;
-		for (const auto& teamIdInMatch : footballLinkTable.getTeamsInMatch(match_->first))
+		dataFile << listMatch->first.getId() << separator;
+		dataFile << listMatch->second.getDate() << separator;
+		dataFile << listMatch->second.getPlace() << separator;
+		dataFile << listMatch->second.getResult().getFirstScore() << ":" << listMatch->second.getResult().getSecondScore() << separator;
+		for (const auto& teamIdInMatch : footballLinkTable.getTeamsInMatch(listMatch->first))
 		{
 			dataFile << teamIdInMatch.getId() << separator;
 		}
 		dataFile << std::endl;
-		++match_;
+		++listMatch;
 	}
 }
 
-void dataBaseSaver::saveTeams(std::ofstream& dataFile) const
+void dataBaseSaver::saveTeams(std::ostream& dataFile) const
 {
-	auto team_ = footballDataBase.getTeamsListBeginning();
-	while (team_ != footballDataBase.getTeamsListEnd())
+	auto listTeam = footballDataBase.getTeams().cbegin();
+	while (listTeam != footballDataBase.getTeams().cend())
 	{
 		dataFile << teamName << separator;
-		dataFile << team_->first.getId() << separator << team_->second->getName();
+		dataFile << listTeam->first.getId() << separator << listTeam->second.getName();
 		dataFile << std::endl;
-		++team_;
+		++listTeam;
 	}
 }
 
-void dataBaseSaver::savePlayers(std::ofstream& dataFile) const
+void dataBaseSaver::savePlayers(std::ostream& dataFile) const
 {
-	auto player_ = footballDataBase.getPlayersListBeginning();
-	while (player_ != footballDataBase.getPlayersListEnd())
+	auto listPlayer = footballDataBase.getPlayers().cbegin();
+	while (listPlayer != footballDataBase.getPlayers().cend())
 	{
 		dataFile << playerName << separator;
-		dataFile << player_->first.getId() << separator << player_->second->getName() << separator;
-		dataFile << footballLinkTable.getPlayerTeam(player_->first).getId();
+		dataFile << listPlayer->first.getId() << separator << listPlayer->second.getName() << separator;
+		dataFile << footballLinkTable.getPlayerTeam(listPlayer->first).getId();
 		dataFile << std::endl;
-		++player_;
+		++listPlayer;
 	}
 }

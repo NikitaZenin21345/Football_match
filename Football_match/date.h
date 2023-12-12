@@ -12,8 +12,9 @@ class date final
 	static [[nodiscard]] bool isValidTime(const std::tm& timeStruct) noexcept;
 
 public:
-	date(const std::tm& time_): time(time_){}
-	std::string getDataInString() const;
+	date() = default;
+	explicit date(const std::tm& time_): time(time_){}
+	[[nodiscard]]std::string getDataInString() const;
 	bool operator==(const date& other) const;
 	static std::tm getTime(const std::string& timeStr);
 };

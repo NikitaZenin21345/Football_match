@@ -49,7 +49,7 @@
     <ClCompile Include="linkTable.cpp">
       <Filter>LinkTable</Filter>
     </ClCompile>
-    <ClCompile Include="databaseElementLoader.cpp">
+    <ClCompile Include="dataBaseElementLoader.cpp">
       <Filter>Database</Filter>
     </ClCompile>
     <ClCompile Include="dataBaseSaver.cpp">
@@ -96,7 +96,7 @@
     <ClInclude Include="date.h">
       <Filter>footbalMatchElement\Match</Filter>
     </ClInclude>
-    <ClInclude Include="databaseElementLoader.h">
+    <ClInclude Include="dataBaseElementLoader.h">
       <Filter>Database</Filter>
     </ClInclude>
     <ClInclude Include="dataBaseSaver.h">

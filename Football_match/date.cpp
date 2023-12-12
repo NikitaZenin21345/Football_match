@@ -40,7 +40,7 @@ std::tm date::getTime(const std::string& timeStr)
 	dateStream >> std::get_time(&time, format);
 	if (!isValidTime(time))
 	{
-		throw parserException("No correct data format");
+		return std::tm{};
 	}
 	return time;
 }

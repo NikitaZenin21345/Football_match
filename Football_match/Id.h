@@ -4,15 +4,16 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+
 class ID
 {
 protected:
-	size_t id{};
+	boost::uuids::uuid  id{};
 public:
 	ID() = default;
-	ID(const size_t id_): id(id_){}
-	void setId(const size_t id_) noexcept{ id = id_; }
-	[[nodiscard]]size_t getId() const noexcept { return id; }
+	ID(const boost::uuids::uuid& id_): id(id_){}
+	void setId(const boost::uuids::uuid  id_) noexcept{ id = id_; }
+	[[nodiscard]] boost::uuids::uuid  getId() const noexcept { return id; }
 };
 
 template<typename IdType>
@@ -22,7 +23,6 @@ class idHash final
 public:
 	size_t operator()(const IdType& id) const noexcept
 	{
-		return std::hash<size_t>()(id.getId());
+		return boost::uuids::hash_value(id.getId());
 	}
 };
-
