@@ -5,51 +5,48 @@
 #include <sstream>
 #include "dataBase.h"
 #include "linkTable.h"
-#include "parser.h"
 #include "token.h"
 
-enum class parserStrategy { loadElementInDataBase, addNewElementInDataBase };
+enum class parserStrategy { uploadExisting, addNewElement };
+enum class elementType { PLAYER, TEAM, MATCH, INVALID };
 
 class  databaseElementLoader final
 {
-	enum class elementType { PLAYER, TEAM, MATCH, INVALID };
-	dataBase& footballMatchDataBase;
-	linkTable& footballMatchLinkTable;
 	parserStrategy strategy;
 
 	[[nodiscard]] elementType getElementType(const std::string& type) const noexcept;
 
 	template<typename Id, typename Element>
 	//req
-	Id insertUniqueElementInDataBase(Element& element)
+	Id insertUniqueElementInDataBase(Element& element, footballMatchObjectDataBase& footballMatchDataBase)
 	{
 		auto elementId = footballMatchDataBase.findId(element);
-		if (elementId == Id{})
+		if (!elementId.has_value())
 		{
 			elementId = Id(footballMatchDataBase.getNewId());
-			element.setId(elementId);
-			footballMatchDataBase.add(elementId, element);
+			element.setId(elementId.value());
+			footballMatchDataBase.add(elementId.value(), element);
 		}
-		return elementId;
+		return elementId.value();
 	}
 
-	void createPlayerAndLoadInDataBase(tokens& parameters) ;
+	void uploaExistingPlayer(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void createPlayerAndAddNewInDataBase(tokens& parameters) ;
+	void createNewPLayer(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void addPlayer(tokens& parameters);
+	void addPlayer(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void createTeamAndAddInDataBase(tokens& parameters);
+	void createNewTeam(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void createTeamAndLoadInDataBase(tokens& parameters) ;
+	void uploadExistingTeam(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void addTeam(tokens& parameters);
+	void addTeam(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void createMatchAndLoadInDataBase(tokens& parameters) ;
+	void uploaExistingMatch(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void createMatchAndAddInDataBase(tokens& parameters) ;
+	void createNewMatch(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
-	void addMatch(tokens& parameters);
+	void addMatch(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 
 public:
 	void setParserStrategy(const parserStrategy newStrategy) noexcept
@@ -57,12 +54,12 @@ public:
 		strategy = newStrategy;
 	}
 
-	 databaseElementLoader(dataBase& footballMatchDataBase_, linkTable& footballMatchLinkTable_, const parserStrategy strategy_) :
-		footballMatchDataBase(footballMatchDataBase_), footballMatchLinkTable(footballMatchLinkTable_), strategy(strategy_) {}
+	databaseElementLoader(const parserStrategy strategy_) :
+		strategy(strategy_) {}
 
 	template<typename Token>
 		requires std::is_convertible_v<Token, tokens>
-	void addElement(Token&& tokensArray)
+	void addElement(Token&& tokensArray, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 	{
 		try
 		{
@@ -71,17 +68,17 @@ public:
 			{
 			case elementType::MATCH:
 			{
-				addMatch(tokensArray);
+				addMatch(tokensArray, footballMatchDataBase, footballMatchLinkTable);
 				break;
 			}
 			case elementType::TEAM:
 			{
-				addTeam(tokensArray);
+				addTeam(tokensArray, footballMatchDataBase, footballMatchLinkTable);
 				break;
 			}
 			case elementType::PLAYER:
 			{
-				addPlayer(tokensArray);
+				addPlayer(tokensArray, footballMatchDataBase, footballMatchLinkTable);
 				break;
 			}
 			case elementType::INVALID:
@@ -96,6 +93,6 @@ public:
 		}
 	}
 
-	void addElement(std::istream& inputFile);
+	void addElement(std::istream& inputFile, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable);
 };
 

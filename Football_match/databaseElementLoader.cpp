@@ -1,131 +1,126 @@
 #include "databaseElementLoader.h"
-#include "elementCreator.h"
+#include "footballMatchObjectCreator.h"
 namespace
 {
-	const std::string matchName = "Match";
-	const std::string teamName = "Team";
-	const std::string playerName = "Player";
+	std::unordered_map<std::string, elementType> elements
+	{
+		{"Match", elementType::MATCH},
+		{"Team", elementType::TEAM},
+		{"Player", elementType::PLAYER},
+	};
+	constexpr size_t LoadInDataBaseElementIndex = 1;
+	constexpr size_t LoadInDataBaseElementIdIndex = 2;
+	constexpr size_t addInDataBaseElementIndex = 1;
 }
 
-databaseElementLoader::elementType  databaseElementLoader::getElementType(const std::string& type) const noexcept
+elementType  databaseElementLoader::getElementType(const std::string& type) const noexcept
 {
-	if (type == matchName)
+	const auto found_command = elements.find(type);
+	if (found_command == elements.end())
 	{
-		return elementType::MATCH;
+		return elementType::INVALID;
 	}
-	if (type == teamName)
-	{
-		return elementType::TEAM;
-	}
-	if (type == playerName)
-	{
-		return elementType::PLAYER;
-	}
-	return elementType::INVALID;
+	return found_command->second;
 }
 
-void databaseElementLoader::createPlayerAndLoadInDataBase(tokens& parameters) 
+void databaseElementLoader::uploaExistingPlayer(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	auto newPlayer = elementCreator::createPlayerFromToken(parameters, 2);
-	const auto newPlayerId = elementCreator::createPlayerIdFromToken(parameters, 1);
-	newPlayer.setId(newPlayerId);
-	const auto playersTeamId = elementCreator::createTeamIdFromToken(parameters, 3);
+	auto newPlayer = footballMatchObjectCreator::createPlayerFromToken(parameters, LoadInDataBaseElementIdIndex);
+	const auto newPlayerId = footballMatchObjectCreator::createPlayerIdFromToken(parameters, LoadInDataBaseElementIndex);
+	const auto playersTeamId = footballMatchObjectCreator::createTeamIdFromToken(parameters, LoadInDataBaseElementIdIndex + 1);
 	footballMatchDataBase.add(newPlayerId, newPlayer);
 	footballMatchLinkTable.add(playersTeamId, newPlayerId);
 }
 
-void databaseElementLoader::createPlayerAndAddNewInDataBase(tokens& parameters) 
+void databaseElementLoader::createNewPLayer(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	auto newPlayer = elementCreator::createPlayerFromToken(parameters, 1);
-	const auto newPlayerId = insertUniqueElementInDataBase<playerId, player>(newPlayer);
-	auto playersTeam = elementCreator::createTeamFromToken(parameters, 2);
-	const auto playersTeamId = insertUniqueElementInDataBase<teamId, team>(playersTeam);
+	auto newPlayer = footballMatchObjectCreator::createPlayerFromToken(parameters, addInDataBaseElementIndex);
+	const auto newPlayerId = insertUniqueElementInDataBase<playerId, player>(newPlayer, footballMatchDataBase);
+	auto playersTeam = footballMatchObjectCreator::createTeamFromToken(parameters, addInDataBaseElementIndex + 1);
+	const auto playersTeamId = insertUniqueElementInDataBase<teamId, team>(playersTeam, footballMatchDataBase);
 	footballMatchLinkTable.add(playersTeamId, newPlayerId);
 }
 
-void  databaseElementLoader::addPlayer(tokens& parameters) 
+void  databaseElementLoader::addPlayer(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	if (strategy == parserStrategy::loadElementInDataBase)
+	if (strategy == parserStrategy::uploadExisting)
 	{
-		createPlayerAndLoadInDataBase(parameters);
+		uploaExistingPlayer(parameters, footballMatchDataBase, footballMatchLinkTable);
 	}
-	else if (strategy == parserStrategy::addNewElementInDataBase)
+	else if (strategy == parserStrategy::addNewElement)
 	{
-		createPlayerAndAddNewInDataBase(parameters);
+		createNewPLayer(parameters, footballMatchDataBase, footballMatchLinkTable);
 	}
 }
 
-void databaseElementLoader::createTeamAndAddInDataBase(tokens& parameters)
+void databaseElementLoader::createNewTeam(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	auto newTeam = elementCreator::createTeamFromToken(parameters, 1);
-	insertUniqueElementInDataBase<teamId, team>(newTeam);
+	auto newTeam = footballMatchObjectCreator::createTeamFromToken(parameters, addInDataBaseElementIndex);
+	insertUniqueElementInDataBase<teamId, team>(newTeam, footballMatchDataBase);
 }
 
-void databaseElementLoader::createTeamAndLoadInDataBase(tokens& parameters) 
+void databaseElementLoader::uploadExistingTeam(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	const auto newTeamId = elementCreator::createTeamIdFromToken(parameters, 1);
-	auto newTeam = elementCreator::createTeamFromToken(parameters, 2);
-	newTeam.setId(newTeamId);
+	const auto newTeamId = footballMatchObjectCreator::createTeamIdFromToken(parameters, LoadInDataBaseElementIndex);
+	auto newTeam = footballMatchObjectCreator::createTeamFromToken(parameters, LoadInDataBaseElementIdIndex);
 	footballMatchDataBase.add(newTeamId, newTeam);
 }
 
-void databaseElementLoader::addTeam(tokens& parameters) 
+void databaseElementLoader::addTeam(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	if (strategy == parserStrategy::loadElementInDataBase)
+	if (strategy == parserStrategy::uploadExisting)
 	{
-		createTeamAndLoadInDataBase(parameters);
+		uploadExistingTeam(parameters, footballMatchDataBase, footballMatchLinkTable);
 	}
-	else if (strategy == parserStrategy::addNewElementInDataBase)
+	else if (strategy == parserStrategy::addNewElement)
 	{
-		createTeamAndAddInDataBase(parameters);
+		createNewTeam(parameters, footballMatchDataBase, footballMatchLinkTable);
 	}
 }
 
-void databaseElementLoader::createMatchAndLoadInDataBase(tokens& parameters) 
+void databaseElementLoader::uploaExistingMatch(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	const auto newMatchId = elementCreator::createMatchIdFromToken(parameters, 1);//вынести константы
-	auto newMatch = elementCreator::createMatchFromToken(parameters, 2, 3, 4);
-	newMatch.setId(newMatchId);
+	const auto newMatchId = footballMatchObjectCreator::createMatchIdFromToken(parameters, LoadInDataBaseElementIndex);
+	auto newMatch = footballMatchObjectCreator::createMatchFromToken(parameters, LoadInDataBaseElementIdIndex, LoadInDataBaseElementIdIndex+ 1, LoadInDataBaseElementIdIndex + 2);
 	footballMatchDataBase.add(newMatchId, newMatch);
-	const auto firstTeamId = elementCreator::createTeamIdFromToken(parameters, 5);
-	const auto secondTeamId = elementCreator::createTeamIdFromToken(parameters, 6);
+	const auto firstTeamId = footballMatchObjectCreator::createTeamIdFromToken(parameters, LoadInDataBaseElementIndex + 4);
+	const auto secondTeamId = footballMatchObjectCreator::createTeamIdFromToken(parameters, LoadInDataBaseElementIndex + 5);
 	footballMatchLinkTable.add(newMatchId, firstTeamId);
 	footballMatchLinkTable.add(newMatchId, secondTeamId);
 }
 
-void databaseElementLoader::createMatchAndAddInDataBase(tokens& parameters) 
+void databaseElementLoader::createNewMatch(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
 	const auto newMatchId = matchId(footballMatchDataBase.getNewId());
-	auto newMatch = elementCreator::createMatchFromToken(parameters, 1, 2, 3);
-	newMatch.setId(newMatchId);
+	auto newMatch = footballMatchObjectCreator::createMatchFromToken(parameters, addInDataBaseElementIndex, addInDataBaseElementIndex + 1, addInDataBaseElementIndex + 2);
 	footballMatchDataBase.add(newMatchId, newMatch);
-	auto firstTeam = elementCreator::createTeamFromToken(parameters, 4);
-	auto secondTeam = elementCreator::createTeamFromToken(parameters, 5);
-	const auto firstTeamId = insertUniqueElementInDataBase<teamId, team>(firstTeam);
-	const auto secondTeamId = insertUniqueElementInDataBase<teamId, team>(secondTeam);
+	auto firstTeam = footballMatchObjectCreator::createTeamFromToken(parameters, 4);
+	auto secondTeam = footballMatchObjectCreator::createTeamFromToken(parameters, 5);
+	const auto firstTeamId = insertUniqueElementInDataBase<teamId, team>(firstTeam, footballMatchDataBase);
+	const auto secondTeamId = insertUniqueElementInDataBase<teamId, team>(secondTeam, footballMatchDataBase);
 	footballMatchLinkTable.add(newMatchId, firstTeamId);
 	footballMatchLinkTable.add(newMatchId, secondTeamId);
 }
 
-void databaseElementLoader::addMatch(tokens& parameters) 
+void databaseElementLoader::addMatch(tokens& parameters, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	if (strategy == parserStrategy::loadElementInDataBase)
+	if (strategy == parserStrategy::uploadExisting)
 	{
-		createMatchAndLoadInDataBase(parameters);
+		uploaExistingMatch(parameters, footballMatchDataBase, footballMatchLinkTable);
 	}
-	else if (strategy == parserStrategy::addNewElementInDataBase)
+	else if (strategy == parserStrategy::addNewElement)
 	{
-		createMatchAndAddInDataBase(parameters);
+		createNewMatch(parameters, footballMatchDataBase, footballMatchLinkTable);
 	}
 }
 
-void databaseElementLoader::addElement(std::istream& inputFile)
+void databaseElementLoader::addElement(std::istream& inputFile, footballMatchObjectDataBase& footballMatchDataBase, linkIdTable& footballMatchLinkTable)
 {
-	auto parser = textFileParser(inputFile);
+	auto parser = textFileSeparatedBySimpleDelimitersParser(inputFile);
 	tokens tokensList = parser.getParsed();
 	while (tokensList.isValid())
 	{
-		addElement(tokensList);
+		addElement(tokensList, footballMatchDataBase, footballMatchLinkTable);
 		tokensList = parser.getParsed();
 	}
 }

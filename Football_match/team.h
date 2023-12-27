@@ -19,8 +19,8 @@ class team final
 	teamId id;
 	std::string name;
 public:
-	team() = default;//delete
-	team(std::string& name_, const teamId& id_) : id(id_), name(std::move(name_)){}
+	team() = default;
+	team(const std::string& name_, const teamId& id_) : id(id_), name(name_){}
 	[[nodiscard]] const std::string& getName() const noexcept { return name; }
 	bool operator==(const team& other) const
 	{

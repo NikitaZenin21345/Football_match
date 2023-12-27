@@ -24,8 +24,8 @@ class match final
 	matchId id{};
 public:
 	match() = default;
-	match(const std::tm& date_, std::string& place_,const result& result_, const matchId& id_) : matchDate(date_),
-		place(std::move(place_)), matchResult(result_), id(id_){}
+	match(const std::tm& date_,const std::string& place_,const result& result_, const matchId& id_) : matchDate(date_),
+		place(place_), matchResult(result_), id(id_){}
 	void setDate(const date& date_)
 	{
 		matchDate = date_;

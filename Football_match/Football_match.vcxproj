@@ -162,8 +162,8 @@
   <ItemGroup>
     <ClCompile Include="dataBase.cpp" />
     <ClCompile Include="dataBaseSaver.cpp" />
-    <ClCompile Include="date.cpp" />
     <ClCompile Include="dataBaseElementLoader.cpp" />
+    <ClCompile Include="date.cpp" />
     <ClCompile Include="id.cpp" />
     <ClCompile Include="linkTable.cpp" />
     <ClCompile Include="parser.cpp" />
@@ -172,16 +172,16 @@
   <ItemGroup>
     <ClInclude Include="dataBaseError.h" />
     <ClInclude Include="dataBaseSaver.h" />
-    <ClInclude Include="date.h" />
     <ClInclude Include="dataBaseElementLoader.h" />
-    <ClInclude Include="elementCreator.h" />
+    <ClInclude Include="date.h" />
+    <ClInclude Include="footballMatchObjectCreator.h" />
     <ClInclude Include="Id.h" />
     <ClInclude Include="linkTable.h" />
     <ClInclude Include="match.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="parserError.h" />
-    <ClInclude Include="player.h" />
     <ClInclude Include="dataBase.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="team.h" />
     <ClInclude Include="token.h" />

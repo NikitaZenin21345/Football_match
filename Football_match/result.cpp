@@ -4,7 +4,7 @@
 result result::getResultFromStr(const std::string& token)
 {
 	std::istringstream stringStream(token);
-	auto parser = textFileParser(stringStream, ":");
+	auto parser = textFileSeparatedBySimpleDelimitersParser(stringStream, ":");
 	auto tokens = parser.getParsed();
 	const auto firstScore = std::stoi(tokens.getTokens(0));
 	const auto secondScore = std::stoi(tokens.getTokens(1));

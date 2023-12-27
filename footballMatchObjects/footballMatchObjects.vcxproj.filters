@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Match">
+      <UniqueIdentifier>{be9f46c7-0d94-46e7-b87e-ee3f6611dc0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{d1a507af-0202-4df6-95cd-d46104e41961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Team">
+      <UniqueIdentifier>{3ae75040-ba5a-4db8-8121-2f808daab7c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Id">
+      <UniqueIdentifier>{94d31a25-cfbe-43ea-8ea1-9cffbca98a22}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

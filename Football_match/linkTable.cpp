@@ -1,6 +1,6 @@
 #include "linkTable.h"
 
-void linkTable::add(const teamId& newTeamId, const playerId& newPlayerId)
+void linkIdTable::add(const teamId& newTeamId, const playerId& newPlayerId)
 {
 	const auto foundPlayer = playersInTeam[newTeamId].find(newPlayerId);
 	if (foundPlayer == std::end(playersInTeam[newTeamId]))
@@ -10,7 +10,7 @@ void linkTable::add(const teamId& newTeamId, const playerId& newPlayerId)
 	}
 }
 
-void linkTable::add(const matchId& newMatchId, const teamId& newTeam)
+void linkIdTable::add(const matchId& newMatchId, const teamId& newTeam)
 {
 	auto& match = teamsInMatch[newMatchId];
 	const auto foundPlayer = match.find(newTeam);

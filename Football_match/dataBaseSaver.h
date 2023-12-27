@@ -5,21 +5,16 @@
 
 class dataBaseSaver final
 {
-	dataBase& footballDataBase;
-	linkTable& footballLinkTable;
-
-	void saveMatches(std::ostream& dataFile) const;
-	void saveTeams(std::ostream& dataFile) const;
-	void savePlayers(std::ostream& dataFile) const;
+	void saveMatches(std::ostream& dataFile,const footballMatchObjectDataBase& footballMatchDataBase, const linkIdTable& footballMatchLinkTable) const;
+	void saveTeams(std::ostream& dataFile, const footballMatchObjectDataBase& footballMatchDataBase, const linkIdTable& footballMatchLinkTable) const;
+	void savePlayers(std::ostream& dataFile, const footballMatchObjectDataBase& footballMatchDataBase, const linkIdTable& footballMatchLinkTable) const;
 
 public:
-	dataBaseSaver(dataBase& footballDataBase_, linkTable& footballLinkTable_) :
-		footballDataBase(footballDataBase_), footballLinkTable(footballLinkTable_){}
 
-	void save(std::ostream& dataFile) const
+	void save(std::ostream& dataFile, const footballMatchObjectDataBase& footballMatchDataBase, const linkIdTable& footballMatchLinkTable) const
 	{
-		saveMatches(dataFile);
-		saveTeams(dataFile);
-		savePlayers(dataFile);
+		saveMatches(dataFile, footballMatchDataBase, footballMatchLinkTable);
+		saveTeams(dataFile, footballMatchDataBase, footballMatchLinkTable);
+		savePlayers(dataFile, footballMatchDataBase, footballMatchLinkTable);
 	}
 };

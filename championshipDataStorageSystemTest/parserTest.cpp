@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "Football_match/parser.h"
+#include "parser.h"
 
 
 class parserTests : public ::testing::Test {
@@ -21,7 +21,7 @@ TEST_F(parserTests,parserString)
     const std::string testName = "Test1";
     const std::string newElementName = playName + "\t" + testName + "\t" + teamName;
     stream << newElementName;
-    textFileParser parser(stream);
+    textFileSeparatedBySimpleDelimitersParser parser(stream);
     auto parsedString = parser.getParsed();
     EXPECT_EQ(parsedString.getTokens(0), playName);
     EXPECT_EQ(parsedString.getTokens(1), testName);
@@ -39,7 +39,7 @@ TEST_F(parserTests, parseStream)
         std::string newElementName = std::to_string(i) + "\t" + std::to_string(i) + " " + std::to_string(i);
         stream << newElementName << std::endl;
 	}
-    textFileParser parser(stream, "\t ");
+    textFileSeparatedBySimpleDelimitersParser parser(stream, "\t ");
     for (size_t i = 0; i <  size/3; ++i)
     {
         auto parsedStream = parser.getParsed();
@@ -57,8 +57,7 @@ TEST_F(parserTests, parserExceptions)
     const std::string testName = "Test1";
     const std::string newElementName = playName + "\t" + testName + "\t" + teamName;
     stream << newElementName;
-    textFileParser parser(stream);
+    textFileSeparatedBySimpleDelimitersParser parser(stream);
     auto parsedString = parser.getParsed();
-    EXPECT_THROW(auto noUsed = parsedString.getTokens(4), std::out_of_range);
     EXPECT_THROW(auto noUsed = parsedString.getTokens(4), std::out_of_range);
 }

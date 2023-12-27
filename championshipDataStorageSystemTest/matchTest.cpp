@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <crtdbg.h> 
-#include "Football_match/elementCreator.h"
-#include "Football_match/match.h"
+#include "footballMatchObjectCreator.h"
+#include "match.h"
 
 
 class MatchTest : public ::testing::Test {
@@ -25,9 +25,9 @@ protected:
 
 TEST_F(MatchTest, Constructor)
 {
-    textFileParser parser(stream);
+    textFileSeparatedBySimpleDelimitersParser parser(stream);
     stream << newMatchName;
-	const auto testMatch = elementCreator::createMatchFromToken(parser.getParsed(), 0, 1, 2);
+	const auto testMatch = footballMatchObjectCreator::createMatchFromToken(parser.getParsed(), 0, 1, 2);
     EXPECT_EQ(testMatch.getResult() , result(3,1));
     EXPECT_EQ(testMatch.getDate(), dateStr);
     EXPECT_EQ(testMatch.getPlace() , placeName);
@@ -35,7 +35,7 @@ TEST_F(MatchTest, Constructor)
 
 TEST_F(MatchTest, Result)
 {
-    textFileParser parser(stream, ":");
+    textFileSeparatedBySimpleDelimitersParser parser(stream, ":");
     stream << resultName;
     auto parsedString = parser.getParsed();
     EXPECT_EQ(std::stoi(parsedString.getTokens(0)), 3);
@@ -45,4 +45,16 @@ TEST_F(MatchTest, Result)
     stream << resultName;
 	parsedString = parser.getParsed();
 }
-   
+
+TEST_F(MatchTest, Data)
+{
+    textFileSeparatedBySimpleDelimitersParser parser(stream);
+    stream << dateStr;
+    date matchData(date::getTime(parser.getParsed().getTokens(0)));
+    EXPECT_EQ(matchData.getDataInString(), dateStr);
+    const auto badDate = date::getTime("15:45:30");
+    EXPECT_TRUE(badDate.tm_year == 0 && badDate.tm_mon == 0 && badDate.tm_mday == 0 &&
+        badDate.tm_hour == 0 &&
+        badDate.tm_min == 0 &&
+        badDate.tm_sec == 0 );
+}

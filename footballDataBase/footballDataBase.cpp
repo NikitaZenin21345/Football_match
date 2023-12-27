@@ -1,4 +1,4 @@
-#include "../chempionshipDataStorageSystemInterfaces/ñhampionshipDataStorageSystem.h"
+#include "ñhampionshipDataStorageSystem.h"
 
 int main(int argc, char* argv[])
 {

@@ -6,7 +6,7 @@
 #include "match.h"
 #include "player.h"
 
-class elementCreator final
+class footballMatchObjectCreator final
 {
 	static constexpr size_t minCountMatchParameters = 3;
 	static constexpr size_t minCountMatchIdParameters = 1;
@@ -19,7 +19,7 @@ public:
 	{
 		if (parameters.isValid() && minCountPlayerIdParameters <= parameters.size())
 		{
-			return playerId{ boost::uuids::string_generator()((parameters.getTokens(index))) };
+			return playerId{ boost::uuids::string_generator()((parameters.getTokens(index)))};
 		}
 		return playerId{};
 	}
@@ -27,7 +27,7 @@ public:
 	{
 		if (parameters.isValid() && minCountPlayerParameters <= parameters.size())
 		{
-			return player{ parameters.getTokens(index), playerId() };
+			return player{ parameters.getTokens(index), playerId()};
 		}
 		return player{};
 	}

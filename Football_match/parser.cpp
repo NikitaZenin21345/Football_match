@@ -23,7 +23,7 @@ namespace
 	}
 }
 
-void textFileParser::parse()
+void textFileSeparatedBySimpleDelimitersParser::parse()
 {
 	size_t index = 0;
 	std::string input_str;
@@ -43,7 +43,7 @@ void textFileParser::parse()
 	parsedTokens = tokens{ std::move(tokensList), false };
 }
 
-tokens& textFileParser::getParsed()
+tokens& textFileSeparatedBySimpleDelimitersParser::getParsed()
 {
 	parse();
 	return parsedTokens;

@@ -1,19 +1,19 @@
 #include "dataBase.h"
 
-void dataBase::add(const playerId& id, const player& newPlayer) noexcept
+void footballMatchObjectDataBase::add(const playerId& Id, player& newPlayer) noexcept
 {
-	players[id] = newPlayer;
+	newPlayer.setId(Id);
+	players[Id] = newPlayer;
 }
 
-void dataBase::add(const teamId& Id, const team& newTeam) noexcept
+void footballMatchObjectDataBase::add(const teamId& Id, team& newTeam) noexcept
 {
+	newTeam.setId(Id);
 	teams[Id] = newTeam;
 }
 
-void dataBase::add(const matchId& Id, const match& newMatch) noexcept
+void footballMatchObjectDataBase::add(const matchId& Id,  match& newMatch) noexcept
 {
+	newMatch.setId(Id);
 	matches[Id] = newMatch;
 }
-
-
-

@@ -5,18 +5,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="footbalMatchElement">
-      <UniqueIdentifier>{5336f49a-eb1f-4625-a47f-a8ce0c6b60dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="footbalMatchElement\Team">
-      <UniqueIdentifier>{d0526361-3fc1-44ee-be1f-5a671a47a7cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="footbalMatchElement\Player">
-      <UniqueIdentifier>{d705fc20-07a1-403e-b447-77e581e0264b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="footbalMatchElement\Match">
-      <UniqueIdentifier>{8077bf4f-6e54-48cf-af3d-b00415bdcb2a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="error">
       <UniqueIdentifier>{e1609eea-4ec6-4e0f-9b5c-8a9b183380b4}</UniqueIdentifier>
     </Filter>
@@ -32,16 +20,22 @@
     <Filter Include="LinkTable">
       <UniqueIdentifier>{ff70798a-ee54-4bf4-bfd6-908c90b6726c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dataBaseElements">
+      <UniqueIdentifier>{80122eec-70ec-4b2f-9322-1f2b154ec470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataBaseElements\PLayer">
+      <UniqueIdentifier>{b513a7df-f87f-4828-aebf-c6199820cff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataBaseElements\Match">
+      <UniqueIdentifier>{f8a49dc3-729f-45f0-9ab2-4f5d9b55663d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataBaseElements\Team">
+      <UniqueIdentifier>{cd06b20f-2980-42cc-a7f8-54916e7717db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="parser.cpp">
       <Filter>parser</Filter>
-    </ClCompile>
-    <ClCompile Include="date.cpp">
-      <Filter>footbalMatchElement\Match</Filter>
-    </ClCompile>
-    <ClCompile Include="result.cpp">
-      <Filter>footbalMatchElement\Match</Filter>
     </ClCompile>
     <ClCompile Include="dataBase.cpp">
       <Filter>Database</Filter>
@@ -58,25 +52,19 @@
     <ClCompile Include="id.cpp">
       <Filter>Id</Filter>
     </ClCompile>
+    <ClCompile Include="date.cpp">
+      <Filter>dataBaseElements\Match</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cpp">
+      <Filter>dataBaseElements\Match</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Id.h">
-      <Filter>Id</Filter>
-    </ClInclude>
     <ClInclude Include="dataBase.h">
       <Filter>Database</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>footbalMatchElement\Player</Filter>
-    </ClInclude>
     <ClInclude Include="parser.h">
       <Filter>parser</Filter>
-    </ClInclude>
-    <ClInclude Include="team.h">
-      <Filter>footbalMatchElement\Team</Filter>
-    </ClInclude>
-    <ClInclude Include="match.h">
-      <Filter>footbalMatchElement\Match</Filter>
     </ClInclude>
     <ClInclude Include="linkTable.h">
       <Filter>LinkTable</Filter>
@@ -84,17 +72,11 @@
     <ClInclude Include="token.h">
       <Filter>parser</Filter>
     </ClInclude>
-    <ClInclude Include="result.h">
-      <Filter>footbalMatchElement\Match</Filter>
-    </ClInclude>
     <ClInclude Include="parserError.h">
       <Filter>error</Filter>
     </ClInclude>
     <ClInclude Include="dataBaseError.h">
       <Filter>error</Filter>
-    </ClInclude>
-    <ClInclude Include="date.h">
-      <Filter>footbalMatchElement\Match</Filter>
     </ClInclude>
     <ClInclude Include="dataBaseElementLoader.h">
       <Filter>Database</Filter>
@@ -102,8 +84,26 @@
     <ClInclude Include="dataBaseSaver.h">
       <Filter>Database</Filter>
     </ClInclude>
-    <ClInclude Include="elementCreator.h">
+    <ClInclude Include="footballMatchObjectCreator.h">
       <Filter>elementCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Id.h">
+      <Filter>Id</Filter>
+    </ClInclude>
+    <ClInclude Include="date.h">
+      <Filter>dataBaseElements\Match</Filter>
+    </ClInclude>
+    <ClInclude Include="match.h">
+      <Filter>dataBaseElements\Match</Filter>
+    </ClInclude>
+    <ClInclude Include="team.h">
+      <Filter>dataBaseElements\Team</Filter>
+    </ClInclude>
+    <ClInclude Include="result.h">
+      <Filter>dataBaseElements\Match</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>dataBaseElements\PLayer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

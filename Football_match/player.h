@@ -18,7 +18,7 @@ class player final
 public:
 
 	player() = default;
-	player( std::string& name_, const playerId& id_): name(std::move(name_)), id(id_){}
+	player(const std::string& name_, const playerId& id_): name(name_), id(id_){}
 	[[nodiscard]]const std::string& getName() const noexcept { return name; }
 	bool operator==(const player& other) const
 	{

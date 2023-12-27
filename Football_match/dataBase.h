@@ -1,11 +1,13 @@
 #pragma once
 #include <unordered_map>
-#include <memory>
+#include <optional>
+#include <ranges>
 #include "player.h"
 #include "team.h"
 #include "match.h"
 
-class dataBase final
+
+class footballMatchObjectDataBase final
 {
 	boost::uuids::random_generator gen;
 	std::unordered_map<playerId, player, idHash<playerId>> players;
@@ -13,21 +15,20 @@ class dataBase final
 	std::unordered_map<matchId, match, idHash<matchId>> matches;
 
 	template<typename Id, typename Element>
-	[[nodiscard]] Element findElementInTable(const std::unordered_map<Id, Element, idHash<Id>>& elementsTable, const Id& id) const
+	[[nodiscard]] std::optional<Element> findElementInTable(const std::unordered_map<Id, Element, idHash<Id>>& elementsTable, const Id& id) const
 	{
-		const auto foundElement = elementsTable.find(id);
-		if (foundElement != elementsTable.end())
-		{
-			return foundElement->second;
+		auto it = elementsTable.find(id);
+		if (it != elementsTable.end()) {
+			return it->second;
 		}
-		return Element{};
+		return std::nullopt;
 	}
 
 	template<typename Id, typename Element>
-	[[nodiscard]] Id findIdInTable
+	[[nodiscard]] std::optional<Id> findIdInTable
 	(const std::unordered_map<Id, Element, idHash<Id>>& elementsTable, const Element& requiredElement) const
 	{
-		if(requiredElement != Element{})
+		if (requiredElement != Element{})
 		{
 			for (const auto& element : elementsTable)
 			{
@@ -37,51 +38,65 @@ class dataBase final
 				}
 			}
 		}
-		return Id{};
-	}//guid id уюрать
+		return std::nullopt;
+	}
 public:
+	footballMatchObjectDataBase() = default;
+	footballMatchObjectDataBase(const footballMatchObjectDataBase&) = delete;
+	footballMatchObjectDataBase(footballMatchObjectDataBase&&) = default;
+	footballMatchObjectDataBase& operator=(const footballMatchObjectDataBase&) = delete;
+	footballMatchObjectDataBase& operator=(footballMatchObjectDataBase&&) = default;
+	~footballMatchObjectDataBase() = default;
 
-	[[nodiscard]] auto& getPlayers()const { return players; }
-	[[nodiscard]] auto& getTeams()const { return teams; }
-	[[nodiscard]] auto& getMatches()const { return matches; }
+	void add(const playerId& id, player& newPlayer) noexcept;
 
-	void add(const playerId& id, const player& newPlayer) noexcept;
+	void add(const teamId& id, team& newTeam) noexcept;
 
-	void add(const teamId& Id, const team& newTeam) noexcept;
+	void add(const matchId& id, match& newMatch) noexcept;
 
-	void add(const matchId& Id, const match& newMatch) noexcept;
+	[[nodiscard]] std::ranges::view auto getPlayers() const {
+		return std::views::values(players);
+	}
 
-	[[nodiscard]] player findElement(const playerId& id) const
+	[[nodiscard]] std::ranges::view auto getTeams() const {
+		return std::views::values(teams);
+	}
+
+	[[nodiscard]] std::ranges::view auto getMatches() const {
+		return std::views::values(matches);
+	}
+
+	[[nodiscard]] std::optional<player> findElementById(const playerId& id) const
 	{
 		return findElementInTable<playerId, player>(players, id);
 	}
 
-	[[nodiscard]] team findElement(const teamId& id) const
+	[[nodiscard]] std::optional<team> findElementById(const teamId& id) const
 	{
 		return findElementInTable<teamId, team>(teams, id);
 	}
 
-	[[nodiscard]] match findElement(const matchId& id) const
+	[[nodiscard]] std::optional<match> findElementById(const matchId& id) const
 	{
 		return findElementInTable<matchId, match>(matches, id);
 	}
 
-	[[nodiscard]] playerId findId(const player& element) const noexcept
+	[[nodiscard]] std::optional<playerId> findId(const player& element) const
 	{
 		return findIdInTable(players, element);
 	}
 
-	[[nodiscard]] teamId findId(const team& element) const noexcept
+	[[nodiscard]] std::optional<teamId> findId(const team& element) const
 	{
 		return findIdInTable(teams, element);
 	}
 
-	[[nodiscard]] matchId findId(const match& element) const noexcept
+	[[nodiscard]] std::optional<matchId> findId(const match& element) const
 	{
 		return findIdInTable(matches, element);
 	}
-	
-	boost::uuids::uuid getNewId() 
+
+	boost::uuids::uuid getNewId()
 	{
 		return gen();
 	}
